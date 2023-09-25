@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    不同Mapper文件的namespace值应该保证唯一
+    在程序中通过[ namespace + id ]定位到要执行哪一条SQL语句
+ -->
+
+<mapper namespace="org.d2u.base.pojo.EmployeeMapper">
+
+    <!-- 通过select、insert、update、delete标签声明要执行的SQL -->
+    <!-- 练习1: 查询emp表中的所有员工信息
+        resultType指定查询的结果将会封装到什么类型中
+        即使最终返回的结果是集合(List<Emp>),resultType也只需要指定集合中的泛型即可!
+    -->
+
+    <select id="findAll" resultType="org.d2u.base.pojo.Employee">
+        select * from emp
+    </select>
+</mapper>
