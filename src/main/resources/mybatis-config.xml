@@ -24,8 +24,8 @@
             </dataSource>
         </environment>
     </environments>
-
     <mappers>
-        <mapper resource="EmployeeMapper.xml"/>
+        <mapper resource="org/d2u/base/data/EmployeeMapper.xml"/>
+        <mapper resource="org/d2u/base/data/DepartmentMapper.xml"/>
     </mappers>
 </configuration>

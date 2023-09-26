@@ -1,10 +1,11 @@
-package org.d2u.base.pojo;
+package org.d2u.base.model;
 
 public class Employee {
     private Integer id;
     private String name;
     private String job;
     private Double salary;
+    private Department department;
 
     public Integer getId() {
         return id;
@@ -38,9 +39,17 @@ public class Employee {
         this.salary = salary;
     }
 
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
     @Override
     public String toString() {
-        return "Emp [id=" + id + ", name=" + name + ", job=" + job + ", salary=" + salary + "]";
+        return "Emp [id=" + id + ", name=" + name + ", job=" + job + ", salary=" + salary + ", of "+department+ "]";
     }
 
 }
