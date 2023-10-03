@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.d2u.base.shared.data.UnitDDLMapper">
+
+    <update id="createTable">
+        CREATE TABLE IF NOT EXISTS ${schema}.unit_scope
+        (
+            name character varying(4)  NOT NULL,
+            CONSTRAINT unit_scope_pkey PRIMARY KEY (name)
+        );
+        CREATE TABLE IF NOT EXISTS ${schema}.unit
+        (
+            name character varying(16)  NOT NULL,
+            scope character varying(4)  NOT NULL,
+            CONSTRAINT unit_pkey PRIMARY KEY (name),
+            CONSTRAINT fk_unit_scope FOREIGN KEY (scope)
+                REFERENCES ${schema}.unit_scope (name) MATCH SIMPLE
+                ON UPDATE CASCADE
+                ON DELETE NO ACTION
+        );
+    </update>
+    <update id="dropTable">
+        DROP TABLE IF EXISTS ${schema}.unit;
+        DROP TABLE IF EXISTS ${schema}.unit_scope;
+    </update>
+    <update id="truncateTable">
+        TRUNCATE TABLE ${schema}.unit;
+        TRUNCATE TABLE ${schema}.unit_scope CASCADE;
+    </update>
+    <insert id="initData">
+        insert into ${schema}.unit_scope values('LEN');
+        insert into ${schema}.unit_scope values('WGT');
+        insert into ${schema}.unit_scope values('SPD');
+        insert into ${schema}.unit_scope values('CUR');
+
+        insert into ${schema}.unit values('MM','LEN');
+        insert into ${schema}.unit values('CM','LEN');
+        insert into ${schema}.unit values('M','LEN');
+        insert into ${schema}.unit values('G','WGT');
+        insert into ${schema}.unit values('KG','WGT');
+        insert into ${schema}.unit values('Pound','WGT');
+        insert into ${schema}.unit values('KM/h','SPD');
+        insert into ${schema}.unit values('Miles/h','SPD');
+
+        insert into ${schema}.unit values('US Dollar','CUR');
+        insert into ${schema}.unit values('Taiwan Dollar','CUR');
+    </insert>
+
+</mapper>

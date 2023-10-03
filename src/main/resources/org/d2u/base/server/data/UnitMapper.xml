@@ -5,49 +5,6 @@
 
 
 <mapper namespace="org.d2u.base.shared.data.UnitMapper">
-    <update id="createTable">
-        CREATE TABLE IF NOT EXISTS public.unit_scope
-        (
-            name character varying(5)  NOT NULL,
-            CONSTRAINT unit_scope_pkey PRIMARY KEY (name)
-        );
-        CREATE TABLE IF NOT EXISTS public.unit
-        (
-            name character varying(50)  NOT NULL,
-            scope character varying(5)  NOT NULL,
-            CONSTRAINT unit_pkey PRIMARY KEY (name, scope),
-            CONSTRAINT fk_unit_scope FOREIGN KEY (scope)
-                REFERENCES public.unit_scope (name) MATCH SIMPLE
-                ON UPDATE CASCADE
-                ON DELETE NO ACTION
-        );
-    </update>
-    <update id="dropTable">
-        DROP TABLE IF EXISTS public.unit_scope;
-        DROP TABLE IF EXISTS public.unit;
-    </update>
-    <update id="truncateTable">
-        DROP TABLE  public.unit;
-        DROP TABLE  public.unit_scope;
-    </update>
-    <insert id="initTable">
-        insert into unit_scope values('LEN');
-        insert into unit_scope values('WGT');
-        insert into unit_scope values('SPD');
-        insert into unit_scope values('CUR');
-
-        insert into unit values('MM','LEN');
-        insert into unit values('CM','LEN');
-        insert into unit values('M','LEN');
-        insert into unit values('G','WGT');
-        insert into unit values('KG','WGT');
-        insert into unit values('Pound','WGT');
-        insert into unit values('KM/h','SPD');
-        insert into unit values('Miles/h','SPD');
-
-        insert into unit values('US Dollar','CUR');
-        insert into unit values('Taiwan Dollar','CUR');
-    </insert>
     <insert id="insert" parameterType="Unit" flushCache="true">
         insert into unit values(#{target.name},#{target.scope.name});
     </insert>
@@ -56,36 +13,30 @@
     <delete id="delete" parameterType="Unit" flushCache="true">
         delete from unit where name=#{target.name} and scope=#{target.scope.name}
     </delete>
-    <select id="findAllUnits" resultMap="org.d2u.base.shared.data.UnitMapper.UnitResultMap">
-        select * from unit
+    <select id="findAll" resultMap="org.d2u.base.shared.data.UnitMapper.UnitResultMap">
+        select name,scope from unit
     </select>
 
     <select id="findUnitsOf" resultMap="org.d2u.base.shared.data.UnitMapper.UnitResultMap">
-        select * from unit where scope= #{name}
+        select name,scope from unit where scope= #{name}
     </select>
 
     <select id="findUnitOf" resultMap="org.d2u.base.shared.data.UnitMapper.UnitResultMap">
-        select * from unit where name=#{name} and scope= #{scope.name}
+        select name,scope from unit where name=#{name} and scope= #{scope.name}
     </select>
-
-    <select id="findAllUnitScope" resultType="UnitScope">
-        select * from unit_scope
-    </select>
-
 
     <resultMap id="UnitResultMap" type="Unit">
-        <!---->
         <constructor>
-            <idArg name="name" column="name" javaType="String"/>
-            <arg name="scope" column="scope" javaType="org.d2u.base.shared.model.Unit$Scope" resultMap="UnitScopeResultMap"/>
+            <idArg column="name" javaType="String"/>
+            <arg column="scope" javaType="org.d2u.base.shared.model.Unit$Scope" resultMap="UnitScopeResultMap"/>
         </constructor>
-
         <!-- column="name"  column="scope"
         <association property="scope" column="scope_name" resultMap="UnitScopeResultMap" columnPrefix="scope_"/>
         javaType="org.d2u.base.shared.model.Unit$Scope"
-
+       -->
+        <!--
         <id property="name" column="name"/>
-        <association property="scope" column="scope" typeHandler="org.d2u.base.server.data.UnitScopeTypeHandler"/>
+        <association property="scope" column="scope" resultMap="UnitScopeResultMap"/>
         -->
         <!--result property="scope"  column="scope" javaType="org.d2u.base.shared.model.Unit$Scope" typeHandler="org.d2u.base.server.data.UnitScopeTypeHandler"/-->
     </resultMap>

@@ -3,9 +3,28 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <!--
+    <properties>
+        <property name="schema" value="store2"/>
+    </properties>
+-->
+    <!--
+    <settings>
+        <setting name="localCacheScope" value="STATEMENT"/>
+    </settings>
+    -->
+    <settings>
+        <setting name="logImpl" value="SLF4J"/>
+    </settings>
     <typeAliases>
         <typeAlias alias="Unit" type="org.d2u.base.shared.model.Unit"/>
         <typeAlias alias="UnitScope" type="org.d2u.base.shared.model.Unit$Scope"/>
+        <typeAlias alias="Quantity" type="org.d2u.base.shared.model.Quantity"/>
+        <typeAlias alias="HistoricalQuantity" type="org.d2u.base.shared.model.HistoricalQuantity"/>
+        <typeAlias alias="Product" type="org.d2u.base.shared.model.Product"/>
+        <typeAlias alias="I18N" type="org.d2u.base.shared.util.I18N"/>
+        <typeAlias alias="I18NLocale" type="org.d2u.base.shared.util.I18N$Locale"/>
+        <typeAlias alias="I18NMessage" type="org.d2u.base.shared.util.I18N$Message"/>
     </typeAliases>
 
     <objectFactory type="org.d2u.base.server.data.CacheableObjectFactory">
@@ -35,6 +54,16 @@
         <mapper resource="org/d2u/base/server/data/EmployeeMapper.xml"/>
         <mapper resource="org/d2u/base/server/data/DepartmentMapper.xml"/>
         <mapper resource="org/d2u/base/server/data/UnitMapper.xml"/>
+        <mapper resource="org/d2u/base/server/data/UnitDDLMapper.xml"/>
+        <mapper resource="org/d2u/base/server/data/UnitScopeMapper.xml"/>
+        <mapper resource="org/d2u/base/server/data/ProductMapper.xml"/>
+        <mapper resource="org/d2u/base/server/data/ProductDDLMapper.xml"/>
+        <mapper resource="org/d2u/base/server/data/ProductHistoricalPriceManager.xml"/>
+        <mapper resource="org/d2u/base/server/data/ProductHistoricalPriceDDLMapper.xml"/>
+        <mapper resource="org/d2u/base/server/data/I18NDDLMapper.xml"/>
+        <mapper resource="org/d2u/base/server/data/I18NMapper.xml"/>
+        <mapper resource="org/d2u/base/server/data/I18NLocaleMapper.xml"/>
+        <mapper resource="org/d2u/base/server/data/I18NMessageMapper.xml"/>
     </mappers>
 
 </configuration>

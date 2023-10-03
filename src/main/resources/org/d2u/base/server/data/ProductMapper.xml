@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    不同Mapper文件的namespace值应该保证唯一
+    在程序中通过[ namespace + id ]定位到要执行哪一条SQL语句
+ -->
+<mapper namespace="org.d2u.base.shared.data.ProductMapper">
+    <insert id="insert" parameterType="Product" flushCache="true">
+        insert into product values(#{target.name});
+        <if test="target.currentPrice != null">
+            insert into product_historical_price(
+                    owner_id,
+                    value,
+                    unit_name,
+                    start_time,
+                    end_time)
+            values(#{target.name},
+                   #{target.currentPrice.quantity.value},
+                   #{target.currentPrice.quantity.unit.name},
+                   #{target.currentPrice.startTime},
+                   #{target.currentPrice.endTime})
+        </if>
+    </insert>
+    <update id="update" parameterType="Product" flushCache="true">
+    </update>
+    <delete id="delete" parameterType="Product" flushCache="true">
+        delete from product where name=#{target.name}
+    </delete>
+    <select id="findAll" resultMap="ProductMap">
+        select distinct on (p.name) p.name as product_name ,
+             h.value as price_quantity_value,
+             h.unit_name as price_quantity_unit_name,
+             u.scope as price_quantity_unit_scope,
+             h.start_time as price_start_time,
+             h.end_time as price_end_time
+        from product p
+        left outer join product_historical_price h
+             on p.name=h.owner_id
+        left outer join unit u
+             on h.unit_name=u.name
+        order by p.name,h.end_time desc;
+    </select>
+
+    <select id="findAllProducts" resultMap="ProductMap">
+        select distinct on (p.name) p.name as product_name ,
+               h.value as price_quantity_value,
+               h.unit_name as price_quantity_unit_name,
+               u.scope as price_quantity_unit_scope,
+               h.start_time as price_start_time,
+               h.end_time as price_end_time
+        from product p
+        left outer join product_historical_price h
+             on p.name=h.owner_id
+        left outer join unit u
+             on h.unit_name=u.name
+        order by p.name,h.end_time desc;
+    </select>
+
+    <resultMap id="ProductMap" type="Product">
+        <id property="name" column="product_name" javaType="String"/>
+        <association property="currentPrice" javaType="HistoricalQuantity" resultMap="ProductHistoricalPriceMap" columnPrefix="price_"/>
+        <!--constructor>
+           <arg column="product_name" javaType="String"/>
+           <arg javaType="HistoricalQuantity" resultMap="ProductHistoricalPriceMap" columnPrefix="price_"/>
+        </constructor-->
+    </resultMap>
+
+    <resultMap id="ProductHistoricalPriceMap" type="HistoricalQuantity">
+        <constructor>
+            <arg javaType="Quantity" resultMap="QuantityResultMap" columnPrefix="quantity_"/>
+            <arg column="start_time" javaType="java.time.OffsetDateTime"/>
+            <arg column="end_time"  javaType="java.time.OffsetDateTime"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="QuantityResultMap" type="Quantity">
+        <constructor>
+            <arg column="value" javaType="Double"/>
+            <arg javaType="Unit" resultMap="UnitResultMap" columnPrefix="unit_"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="UnitResultMap" type="Unit">
+        <constructor>
+            <idArg column="name" javaType="String"/>
+            <arg column="scope" javaType="org.d2u.base.shared.model.Unit$Scope" resultMap="UnitScopeResultMap"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="UnitScopeResultMap" type="UnitScope">
+        <constructor>
+            <idArg column="scope" javaType="String"/>
+        </constructor>
+    </resultMap>
+</mapper>

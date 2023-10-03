@@ -16,9 +16,9 @@ public class CacheableObjectFactory extends DefaultObjectFactory {
             Cacheable cached = cache.get(type,obj.cacheKey());
             if(cached == null) {
                 cache.put(cached = obj);
-                System.out.println("CacheableObjectFactory create "+type.getSimpleName()+" : " + cached + " and place in cache");
+                //System.out.println("CacheableObjectFactory create "+type.getSimpleName()+" : " + cached + " and place in cache");
             }else{
-                System.out.println("CacheableObjectFactory reuse "+type.getSimpleName()+ " : "+ cached +" from cache");
+                //System.out.println("CacheableObjectFactory reuse "+type.getSimpleName()+ " : "+ cached +" from cache");
             }
             return (T)cached;
         }else return super.create(type,constructorArgTypes,constructorArgs);

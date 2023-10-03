@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.d2u.base.shared.data.I18NDDLMapper">
+
+    <update id="createTable">
+        CREATE TABLE IF NOT EXISTS ${schema}.i18n_locale
+        (
+            language character varying(4) NOT NULL,
+            country character varying(4) NOT NULL,
+            CONSTRAINT i18n_locale_pkey PRIMARY KEY (language,country)
+        );
+
+        CREATE TABLE IF NOT EXISTS ${schema}.i18n_message
+        (
+            id character varying(64) NOT NULL,
+            CONSTRAINT i18n_message_pkey PRIMARY KEY (id)
+        );
+
+        CREATE TABLE IF NOT EXISTS ${schema}.i18n
+        (
+            message_id character varying(64) NOT NULL,
+            language character varying(4) NOT NULL,
+            country character varying(4) NOT NULL,
+            template character varying(184) NOT NULL,
+            CONSTRAINT i18n_pkey PRIMARY KEY (message_id,language,country),
+            CONSTRAINT fk_i18n_message FOREIGN KEY (message_id)
+                REFERENCES ${schema}.i18n_message (id) MATCH SIMPLE
+                ON UPDATE CASCADE
+                ON DELETE CASCADE,
+            CONSTRAINT fk_i18n_locale FOREIGN KEY (language,country)
+                REFERENCES ${schema}.i18n_locale (language,country) MATCH SIMPLE
+                ON UPDATE CASCADE
+                ON DELETE CASCADE
+        )
+    </update>
+    <update id="dropTable">
+        DROP TABLE IF EXISTS ${schema}.i18n;
+        DROP TABLE IF EXISTS ${schema}.i18n_locale;
+        DROP TABLE IF EXISTS ${schema}.i18n_message;
+    </update>
+    <update id="truncateTable">
+        TRUNCATE TABLE ${schema}.i18n;
+        TRUNCATE TABLE ${schema}.i18n_locale CASCADE;
+        TRUNCATE TABLE ${schema}.i18n_message CASCADE;
+    </update>
+    <insert id="initData">
+        insert into ${schema}.i18n_locale(language,country) values('en','');
+        insert into ${schema}.i18n_locale(language,country) values('en','US');
+        insert into ${schema}.i18n_locale(language,country) values('zh','TW');
+        insert into ${schema}.i18n_locale(language,country) values('zh','CN');
+
+        insert into ${schema}.i18n_message values('LOGIN_ACCOUNT');
+        insert into ${schema}.i18n_message values('LOGIN_PASSWORD');
+        insert into ${schema}.i18n_message values('LOGIN_ACTION');
+        insert into ${schema}.i18n_message values('LOGOUT_ACTION');
+        insert into ${schema}.i18n_message values('LOGIN_CHANGE_PASSWORD');
+        insert into ${schema}.i18n_message values('LOGIN_INPUT_PASSWORD_AGAIN');
+
+        insert into ${schema}.i18n_message values('CONFIRM');
+        insert into ${schema}.i18n_message values('CANCEL');
+        insert into ${schema}.i18n_message values('RESET');
+        insert into ${schema}.i18n_message values('SAVE');
+        insert into ${schema}.i18n_message values('WELCOME_USER');
+
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_ACCOUNT','en','','Account');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_PASSWORD','en','','Password');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_ACTION','en','','Login');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGOUT_ACTION','en','','Logout');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_CHANGE_PASSWORD','en','','Change password');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_INPUT_PASSWORD_AGAIN','en','','Please input password again');
+        insert into ${schema}.i18n(message_id,language,country,template) values('CONFIRM','en','','Confirm');
+        insert into ${schema}.i18n(message_id,language,country,template) values('CANCEL','en','','Cancel');
+        insert into ${schema}.i18n(message_id,language,country,template) values('RESET','en','','Reset');
+        insert into ${schema}.i18n(message_id,language,country,template) values('SAVE','en','','Save');
+        insert into ${schema}.i18n(message_id,language,country,template) values('WELCOME_USER','en','','Welcome {0}');
+
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_ACCOUNT','zh','TW','帳號');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_PASSWORD','zh','TW','密碼');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_ACTION','zh','TW','登入');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGOUT_ACTION','zh','TW','登出');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_CHANGE_PASSWORD','zh','TW','改變密碼');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_INPUT_PASSWORD_AGAIN','zh','TW','請再輸入一次密碼');
+        insert into ${schema}.i18n(message_id,language,country,template) values('CONFIRM','zh','TW','確認');
+        insert into ${schema}.i18n(message_id,language,country,template) values('CANCEL','zh','TW','取消');
+        insert into ${schema}.i18n(message_id,language,country,template) values('RESET','zh','TW','重設');
+        insert into ${schema}.i18n(message_id,language,country,template) values('SAVE','zh','TW','儲存');
+        insert into ${schema}.i18n(message_id,language,country,template) values('WELCOME_USER','zh','TW','歡迎 {0}');
+
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_ACCOUNT','zh','CN','帐号');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_PASSWORD','zh','CN','密码');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_ACTION','zh','CN','登入');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGOUT_ACTION','zh','CN','登出');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_CHANGE_PASSWORD','zh','CN','改变密码');
+        insert into ${schema}.i18n(message_id,language,country,template) values('LOGIN_INPUT_PASSWORD_AGAIN','zh','CN','请再输入一次密码');
+        insert into ${schema}.i18n(message_id,language,country,template) values('CONFIRM','zh','CN','确认');
+        insert into ${schema}.i18n(message_id,language,country,template) values('CANCEL','zh','CN','取消');
+        insert into ${schema}.i18n(message_id,language,country,template) values('RESET','zh','CN','重设');
+        insert into ${schema}.i18n(message_id,language,country,template) values('SAVE','zh','CN','储存');
+        insert into ${schema}.i18n(message_id,language,country,template) values('WELCOME_USER','zh','CN','欢迎 {0}');
+
+
+
+    </insert>
+
+</mapper>

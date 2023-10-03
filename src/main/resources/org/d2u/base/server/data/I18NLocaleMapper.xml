@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.d2u.base.shared.data.I18NLocaleMapper">
+    <insert id="insert" parameterType="I18NLocale" flushCache="true">
+        insert into i18n_locale(language,country) values(#{target.language},#{target.country});
+    </insert>
+    <update id="update" parameterType="I18NLocale" flushCache="true">
+    </update>
+    <delete id="delete" parameterType="I18NLocale" flushCache="true">
+        delete from i18n_locale where language=#{target.language} and
+        <if test="#{target.country} != null">country=#{target.country}</if>
+        <if test="#{target.country} == null">country is null</if>
+    </delete>
+    <select id="findAll" resultMap="I18NLocaleResultMap">
+        select language,country from i18n_locale
+    </select>
+    <select id="findLocale" resultMap="I18NLocaleResultMap">
+        select language,country from i18n_locale where language=#{language} and
+        <if test="#{country} != null"> country=#{country}</if>
+        <if test="#{country} == null"> country is null</if>
+    </select>
+    <resultMap id="I18NLocaleResultMap" type="I18NLocale">
+        <constructor>
+            <idArg column="language" javaType="String"/>
+            <idArg column="country" javaType="String"/>
+        </constructor>
+    </resultMap>
+</mapper>

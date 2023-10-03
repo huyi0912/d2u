@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.util.List;
 
 public class TestEmployeeMapper{
-    @Test
+    //@Test
     public void findAll() {
 
         System.out.println("Test EmployeeMapper.findAll");

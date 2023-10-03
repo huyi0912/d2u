@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.d2u.base.shared.data.I18NMapper">
+    <insert id="insert" parameterType="I18N" flushCache="true">
+        insert into i18n(message_id,language,country,template) values(#{target.message.id},#{target.locale.language},#{target.locale.country},#{target.template});
+    </insert>
+    <update id="update" parameterType="I18N" flushCache="true">
+    </update>
+    <delete id="delete" parameterType="I18N" flushCache="true">
+        delete from i18n where message_id=#{target.message.id} and language=#{target.locale.language} and
+        <if test="#{target.locale.country} != null">country=#{target.locale.country}</if>
+        <if test="#{target.locale.country} == null">country is null</if>
+    </delete>
+    <select id="findAll" resultMap="I18NResultMap">
+        select message_id,
+               language as locale_language,
+               country as locale_country,
+               template
+        from i18n
+    </select>
+    <select id="findI18N" resultMap="I18NResultMap">
+        select message_id,
+               language as locale_language,
+               country as locale_country,
+               template
+        from i18n where message_id=#{messageId} and language=#{locale.language} and
+        <if test="#{locale}.country != null"> country=#{locale.country}</if>
+        <if test="#{locale}.country == null"> country=''</if>
+    </select>
+
+    <select id="findAllI18N" resultMap="I18NResultMap">
+        select message_id,
+               language as locale_language,
+               country as locale_country,
+               template
+        from i18n where language=#{locale.language} and
+        <if test="#{locale}.country != null"> country=${locale.country}</if>
+        <if test="#{locale}.country == null"> country=''</if>
+    </select>
+
+    <resultMap id="I18NResultMap" type="I18N">
+        <constructor>
+            <idArg javaType="I18NMessage" resultMap="I18NMessageResultMap" columnPrefix="message_"/>
+            <idArg javaType="I18NLocale" resultMap="I18NLocaleResultMap" columnPrefix="locale_"/>
+            <arg column="template" javaType="String"/>
+        </constructor>
+    </resultMap>
+    <resultMap id="I18NMessageResultMap" type="I18NMessage">
+        <constructor>
+            <idArg column="id" javaType="String"/>
+        </constructor>
+    </resultMap>
+    <resultMap id="I18NLocaleResultMap" type="I18NLocale">
+        <constructor>
+            <idArg column="language" javaType="String" />
+            <idArg column="country" javaType="String"/>
+        </constructor>
+    </resultMap>
+</mapper>

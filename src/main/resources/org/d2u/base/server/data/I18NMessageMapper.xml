@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.d2u.base.shared.data.I18NMessageMapper">
+    <insert id="insert" parameterType="I18NMessage" flushCache="true">
+        insert into i18n_message(id) values(#{target.id});
+    </insert>
+    <update id="update" parameterType="I18NMessage" flushCache="true">
+    </update>
+    <delete id="delete" parameterType="I18NMessage" flushCache="true">
+        delete from i18n_message where id=#{target.id}
+    </delete>
+    <select id="findAll" resultMap="I18NMessageResultMap">
+        select id from i18n_message
+    </select>
+    <select id="findMessage" resultMap="I18NMessageResultMap">
+        select id from i18n_message where id=#{id}
+    </select>
+    <resultMap id="I18NMessageResultMap" type="I18NMessage">
+        <constructor>
+            <idArg column="id" javaType="String"/>
+        </constructor>
+    </resultMap>
+</mapper>

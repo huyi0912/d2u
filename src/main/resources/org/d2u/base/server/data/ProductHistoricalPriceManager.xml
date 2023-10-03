@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    不同Mapper文件的namespace值应该保证唯一
+    在程序中通过[ namespace + id ]定位到要执行哪一条SQL语句
+ -->
+<mapper namespace="org.d2u.base.shared.data.ProductHistoricalPriceManager">
+    <insert id="insert" parameterType="HistoricalQuantity" flushCache="true">
+        insert into product_historical_price (
+            owner_id,
+            value,
+            unit_name,
+            start_time,
+            end_time)
+        values(
+            #{target.owner.name},
+            #{target.quantity.value},
+            #{target.quantity.unit.name},
+            #{target.startTime},
+            #{target.endTime}
+               );
+    </insert>
+    <update id="update" parameterType="HistoricalQuantity" flushCache="true">
+    </update>
+    <delete id="delete" parameterType="HistoricalQuantity" flushCache="true">
+        delete from product_historical_price where
+            owner_id = #{target.owner.name} and
+            unit_name = #{target.quantity.name} and
+            start_time = #{target.startTime} and
+            end_time = #{target.endTime}
+    </delete>
+    <select id="findAll" resultMap="org.d2u.base.shared.data.UnitMapper.UnitResultMap">
+        select owner_id       as product_name,
+               value          as price_value,
+               unit_name      as price_currency_name,
+               start_time,
+               end_time
+        from product_historical_price
+    </select>
+
+    <select id="findPrevious" resultMap="HistoricalQuantityMap">
+        select owner_id       as product_name,
+               value          as price_value,
+               unit_name      as price_currency_name,
+               start_time,
+               end_time
+        from product_historical_price
+    </select>
+
+    <select id="findAt" resultMap="HistoricalQuantityMap">
+        select owner_id       as product_name,
+               value          as price_value,
+               unit_name      as price_currency_name,
+               start_time,
+               end_time
+        from product_historical_price
+    </select>
+
+    <resultMap id="HistoricalQuantityMap" type="org.d2u.base.shared.model.HistoricalQuantity">
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <association property="owner" resultMap="ProductResultMap" columnPrefix="product_" />
+        <association property="quantity" resultMap="QuantityResultMap"  columnPrefix="price_"/>
+    </resultMap>
+
+    <resultMap id="ProductResultMap" type="org.d2u.base.shared.model.Product">
+        <id property="name" column="owner_id"/>
+        <!--association property="currentPrice" resultMap="HistoricalQuantityMap" columnPrefix="price_"/-->
+    </resultMap>
+
+    <resultMap id="QuantityResultMap" type="org.d2u.base.shared.model.Quantity">
+        <result property="value" column="value"/>
+        <association property="unit" resultMap="UnitResultMap" columnPrefix="currency_"/>
+    </resultMap>
+
+    <resultMap id="UnitResultMap" type="Unit">
+        <constructor>
+            <idArg name="name" column="name" javaType="String"/>
+            <arg name="scope" column="scope" javaType="org.d2u.base.shared.model.Unit$Scope" resultMap="UnitScopeResultMap"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="UnitScopeResultMap" type="UnitScope">
+        <constructor>
+            <idArg column="scope" javaType="String"/>
+        </constructor>
+    </resultMap>
+</mapper>
