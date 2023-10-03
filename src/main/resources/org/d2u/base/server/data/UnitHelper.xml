@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.d2u.base.shared.data.UnitHelper">
+    <select id="findAllUnits" resultMap="org.d2u.base.shared.data.UnitHelper.UnitResultMap">
+        select * from unit
+<!--
+        select
+            U.name unit_name,
+            S.name scope_name
+        from unit U left outer join unit_scope S on U.scope = S.name
+-->
+    </select>
+
+    <select id="findUnitsOf" resultMap="org.d2u.base.shared.data.UnitHelper.UnitResultMap">
+        select * from unit where scope= #{name}
+    </select>
+
+    <select id="findUnitOf" resultMap="org.d2u.base.shared.data.UnitHelper.UnitResultMap">
+        select * from unit where name=#{name} and scope= #{name}
+    </select>
+
+    <select id="findAllUnitScope" resultType="UnitScope">
+        select * from unit_scope
+    </select>
+
+
+    <resultMap id="UnitResultMap" type="Unit">
+        <!---->
+        <constructor>
+            <idArg name="name" column="name" javaType="String"/>
+            <arg name="scope" column="scope" javaType="org.d2u.base.shared.model.Unit$Scope" resultMap="UnitScopeResultMap"/>
+        </constructor>
+
+        <!-- column="name"  column="scope"
+        <association property="scope" column="scope_name" resultMap="UnitScopeResultMap" columnPrefix="scope_"/>
+        javaType="org.d2u.base.shared.model.Unit$Scope"
+
+        <id property="name" column="name"/>
+        <association property="scope" column="scope" typeHandler="org.d2u.base.server.data.UnitScopeTypeHandler"/>
+        -->
+        <!--result property="scope"  column="scope" javaType="org.d2u.base.shared.model.Unit$Scope" typeHandler="org.d2u.base.server.data.UnitScopeTypeHandler"/-->
+    </resultMap>
+
+    <resultMap id="UnitScopeResultMap" type="UnitScope">
+        <constructor>
+            <idArg column="scope" javaType="String"/>
+        </constructor>
+    </resultMap>
+</mapper>

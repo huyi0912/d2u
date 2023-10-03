@@ -1,4 +1,4 @@
-package org.d2u.base.model;
+package org.d2u.base.shared.model;
 
 public class Employee {
     private Integer id;

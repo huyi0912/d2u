@@ -1,6 +1,5 @@
-package org.d2u.base.model;
+package org.d2u.base.shared.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Department {

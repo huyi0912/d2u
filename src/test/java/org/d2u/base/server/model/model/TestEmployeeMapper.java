@@ -1,11 +1,13 @@
-package org.d2u.base.model;
+package org.d2u.base.server.model.model;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.d2u.base.data.DepartmentMapper;
-import org.d2u.base.data.EmployeeMapper;
+import org.d2u.base.shared.data.DepartmentMapper;
+import org.d2u.base.shared.data.EmployeeMapper;
+import org.d2u.base.shared.model.Department;
+import org.d2u.base.shared.model.Employee;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
