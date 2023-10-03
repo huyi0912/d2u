@@ -3,6 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <typeAliases>
+        <typeAlias alias="Unit" type="org.d2u.base.shared.model.Unit"/>
+        <typeAlias alias="UnitScope" type="org.d2u.base.shared.model.Unit$Scope"/>
+    </typeAliases>
+
+    <objectFactory type="org.d2u.base.server.data.CacheableObjectFactory">
+    </objectFactory>
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>
@@ -25,7 +32,9 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="org/d2u/base/data/EmployeeMapper.xml"/>
-        <mapper resource="org/d2u/base/data/DepartmentMapper.xml"/>
+        <mapper resource="org/d2u/base/server/data/EmployeeMapper.xml"/>
+        <mapper resource="org/d2u/base/server/data/DepartmentMapper.xml"/>
+        <mapper resource="org/d2u/base/server/data/UnitMapper.xml"/>
     </mappers>
+
 </configuration>

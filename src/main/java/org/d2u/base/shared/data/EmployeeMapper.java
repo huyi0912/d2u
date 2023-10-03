@@ -1,7 +1,6 @@
-package org.d2u.base.data;
+package org.d2u.base.shared.data;
 
-import org.d2u.base.model.Department;
-import org.d2u.base.model.Employee;
+import org.d2u.base.shared.model.Employee;
 
 import java.util.List;
 
