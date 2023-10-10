@@ -11,9 +11,7 @@
     <update id="update" parameterType="I18N" flushCache="true">
     </update>
     <delete id="delete" parameterType="I18N" flushCache="true">
-        delete from i18n where message_id=#{target.message.id} and language=#{target.locale.language} and
-        <if test="#{target.locale.country} != null">country=#{target.locale.country}</if>
-        <if test="#{target.locale.country} == null">country is null</if>
+        delete from i18n where message_id=#{target.message.id} and language=#{target.locale.language} and country=#{target.locale.country}
     </delete>
     <select id="findAll" resultMap="I18NResultMap">
         select message_id,
@@ -23,23 +21,32 @@
         from i18n
     </select>
     <select id="findI18N" resultMap="I18NResultMap">
-        select message_id,
+        select distinct on (message_id) message_id,
                language as locale_language,
                country as locale_country,
                template
-        from i18n where message_id=#{messageId} and language=#{locale.language} and
-        <if test="#{locale}.country != null"> country=#{locale.country}</if>
-        <if test="#{locale}.country == null"> country=''</if>
+        from i18n
+        where message_id=#{messageId} and language=#{locale.language} and (country=#{locale.country} or country='')
+        order by message_id,country desc
     </select>
 
     <select id="findAllI18N" resultMap="I18NResultMap">
-        select message_id,
+        <if test="locale!=null">
+            select distinct on (message_id) message_id,
                language as locale_language,
                country as locale_country,
                template
-        from i18n where language=#{locale.language} and
-        <if test="#{locale}.country != null"> country=${locale.country}</if>
-        <if test="#{locale}.country == null"> country=''</if>
+            from i18n
+            where language=#{locale.language} and (country=#{locale.country} or country='')
+            order by message_id,country desc
+        </if>
+        <if test="locale==null">
+            select message_id,
+                language as locale_language,
+                country as locale_country,
+                template
+            from i18n
+        </if>
     </select>
 
     <resultMap id="I18NResultMap" type="I18N">

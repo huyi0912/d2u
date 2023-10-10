@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestI18N extends TestBase{
 
-    static Logger logger = null;
+    static Logger logger;
     static{
         logger = LoggerFactory.getLogger(TestI18N.class);
     }
@@ -37,7 +37,7 @@ public class TestI18N extends TestBase{
     public void insertDeleteFindI18N(){
         doTransaction(schema1,session->{
             String messageID = "SAILOR";
-            I18N.Locale enLocale = new I18N.Locale("en","");
+            I18N.Locale enLocale = new I18N.Locale("en",null);
             I18N.Locale twLocale = new I18N.Locale("zh","TW");
             I18N.Locale cnLocale = new I18N.Locale("zh","CN");
             I18NMapper i18nMapper = session.getMapper(I18NMapper.class);
@@ -99,15 +99,49 @@ public class TestI18N extends TestBase{
 
         doQuery(schema1, session -> {
             I18NMapper helper = session.getMapper(I18NMapper.class);
-            List<I18N> items = helper.findAllI18N(new I18N.Locale("en",null));
-            items.forEach(u -> logger.debug("findAllI18N(en) from "+schema1+" return => "+u.toString()));
+            List<I18N> items = helper.findAllI18N(new I18N.Locale("en"));
+            items.forEach(u -> logger.debug("findAllI18N() of en locale from "+schema1+" return => "+u.toString()));
             assertEquals(11,items.size(),"I18N count");
+
+            items = helper.findAllI18N(null);
+            items.forEach(u -> logger.debug("findAllI18N() of null locale from "+schema1+" return => "+u.toString()));
+            assertEquals(33,items.size(),"I18N count");
+        });
+
+        doTransaction(schema1,session->{
+            I18NMessageMapper mapper = session.getMapper(I18NMessageMapper.class);
+
+            String messageID = "SAILOR";
+            I18N.Locale enLocale = new I18N.Locale("en");
+            I18N.Locale usLocale = new I18N.Locale("en","US");
+
+            I18NMapper i18nMapper = session.getMapper(I18NMapper.class);
+
+            mapper.insert(new I18N.Message(messageID));
+            I18N.Message sailorMsg = mapper.findMessage(messageID);
+            assertNotNull(sailorMsg,"Queried inserted "+messageID+" message");
+            I18N localizedSailor1 = new I18N(sailorMsg,enLocale,"Skipper");
+            i18nMapper.insert(localizedSailor1);
+            I18N enSailor = i18nMapper.findI18N(messageID,enLocale);
+            assertNotNull(enSailor,"findI18n of "+messageID+" of "+enLocale);
+
+            I18N usSailor = i18nMapper.findI18N(messageID,usLocale);
+
+            assertNotNull(usSailor,"findI18n of "+messageID+" of "+usLocale+" fall back to en locale");
+            assertEquals(usSailor,enSailor,"When SAILOR not defined in en/US should fall back to en locale");
+
+            List<I18N> i18nList = i18nMapper.findAllI18N(usLocale);
+            assertEquals(12,i18nList.size(),"findAllI18N of "+usLocale);
+            for(I18N item:i18nList){
+                assertEquals(enLocale,item.locale(),"findAllI18N should include message not defined in "+usLocale+" but defined in "+enLocale);
+            }
+            mapper.delete(sailorMsg);
         });
     }
 
     @Test
     public void testRecordWithNullParameter(){
         I18N.Locale locale = new I18N.Locale("en",null);
-        assertNull(locale.country(),"country");
+        assertEquals("",locale.country(),"country");
     }
 }

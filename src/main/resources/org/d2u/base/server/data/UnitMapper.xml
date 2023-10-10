@@ -30,15 +30,6 @@
             <idArg column="name" javaType="String"/>
             <arg column="scope" javaType="org.d2u.base.shared.model.Unit$Scope" resultMap="UnitScopeResultMap"/>
         </constructor>
-        <!-- column="name"  column="scope"
-        <association property="scope" column="scope_name" resultMap="UnitScopeResultMap" columnPrefix="scope_"/>
-        javaType="org.d2u.base.shared.model.Unit$Scope"
-       -->
-        <!--
-        <id property="name" column="name"/>
-        <association property="scope" column="scope" resultMap="UnitScopeResultMap"/>
-        -->
-        <!--result property="scope"  column="scope" javaType="org.d2u.base.shared.model.Unit$Scope" typeHandler="org.d2u.base.server.data.UnitScopeTypeHandler"/-->
     </resultMap>
 
     <resultMap id="UnitScopeResultMap" type="UnitScope">

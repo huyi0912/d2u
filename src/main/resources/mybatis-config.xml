@@ -3,16 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <!--
-    <properties>
-        <property name="schema" value="store2"/>
-    </properties>
--->
-    <!--
-    <settings>
-        <setting name="localCacheScope" value="STATEMENT"/>
-    </settings>
-    -->
     <settings>
         <setting name="logImpl" value="SLF4J"/>
     </settings>
@@ -51,10 +41,8 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="org/d2u/base/server/data/EmployeeMapper.xml"/>
-        <mapper resource="org/d2u/base/server/data/DepartmentMapper.xml"/>
-        <mapper resource="org/d2u/base/server/data/UnitMapper.xml"/>
         <mapper resource="org/d2u/base/server/data/UnitDDLMapper.xml"/>
+        <mapper resource="org/d2u/base/server/data/UnitMapper.xml"/>
         <mapper resource="org/d2u/base/server/data/UnitScopeMapper.xml"/>
         <mapper resource="org/d2u/base/server/data/ProductMapper.xml"/>
         <mapper resource="org/d2u/base/server/data/ProductDDLMapper.xml"/>
