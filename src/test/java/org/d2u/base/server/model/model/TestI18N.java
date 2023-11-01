@@ -5,9 +5,12 @@ import org.d2u.base.shared.data.I18NMapper;
 import org.d2u.base.shared.data.I18NMessageMapper;
 import org.d2u.base.shared.util.I18N;
 import org.junit.jupiter.api.Test;
+import org.openjdk.jol.vm.VM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -143,5 +146,39 @@ public class TestI18N extends TestBase{
     public void testRecordWithNullParameter(){
         I18N.Locale locale = new I18N.Locale("en",null);
         assertEquals("",locale.country(),"country");
+    }
+
+    @Test
+    public void testI18NCacheable() throws Exception{
+        final I18N.Locale enLocale = new I18N.Locale("en");
+        List<I18N> schema1List = new ArrayList<I18N>();
+        List<I18N> schema2List = new ArrayList<I18N>();
+        doQuery(schema1, session -> {
+            I18NMapper helper = session.getMapper(I18NMapper.class);
+            List<I18N> items1 = helper.findAllI18N(enLocale);
+            assertEquals(11,items1.size(),"I18N count");
+            for(int i=0,size= items1.size();i<size;i++){
+                I18N item1 = items1.get(i);
+                I18N item2 = helper.findI18N(item1.message().id(),enLocale);
+                //logger.debug("-------"+i+"==>"+ VM.current().addressOf(items1)+"  compare to  "+ VM.current().addressOf(item2));
+                assertSame(item2,item1,"query I18N should return same object");
+                schema1List.add(item1);
+            }
+        });
+
+        doQuery(schema2, session -> {
+            I18NMapper helper = session.getMapper(I18NMapper.class);
+            List<I18N> items1 = helper.findAllI18N(enLocale);
+            assertEquals(11,items1.size(),"I18N count");
+            for(int i=0,size= items1.size();i<size;i++){
+                schema2List.add(items1.get(i));
+            }
+        });
+        for(int i=0,size=schema1List.size();i<size;i++){
+            I18N item1 = schema1List.get(i);
+            I18N item2 = schema2List.get(i);
+            assertEquals(item1,item2,"Though different schema but I18N might still the same");
+            assertNotSame(item1,item2,"Different schema should not have same equal I18N");
+        }
     }
 }

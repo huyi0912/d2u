@@ -10,6 +10,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.d2u.base.server.data.SqlRunnable;
+import org.d2u.base.server.util.TenantInfo;
 import org.d2u.base.shared.data.*;
 import org.d2u.base.shared.model.Unit;
 import org.junit.jupiter.api.BeforeAll;
@@ -60,6 +61,7 @@ public class TestBase {
 
         SqlSession session = factory.openSession();
         session.getConnection().setSchema(schema);
+        TenantInfo.setSchema(schema);
         logger.debug("newSession of schema("+schema+")");
         return session;
     }

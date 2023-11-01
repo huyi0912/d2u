@@ -8,24 +8,8 @@ import org.apache.ibatis.annotations.Param;
  * @param locale
  * @param template no more than 184 bytes
  */
-public record I18N(Message message,Locale locale,String template) {
-    public record Locale(@Param("language") String language,@Param("country") String country){
-        public Locale(@Param("language") String language){
-            this(language,"");
-        }
-        @Override
-        public String country(){
-            if(country==null)
-                return "";
-            return country;
-        }
-    }
 
-    /**
-     *
-     * @param id no more than 64 bytes
-     */
-    public record Message(String id){}
+public record I18N(Message message,Locale locale,String template) implements Cacheable{
 
     /**
      * localized template with {0},{1},{2},.... be replaced by parameters accordingly
@@ -44,4 +28,27 @@ public record I18N(Message message,Locale locale,String template) {
             return buffer;
         }
     }
+
+    @Override
+    public String cacheKey() {
+        return message().id()+"-"+locale().language()+"-"+locale().country();
+    }
+
+    public record Locale(@Param("language") String language, @Param("country") String country){
+        public Locale(@Param("language") String language){
+            this(language,"");
+        }
+        @Override
+        public String country(){
+            if(country==null)
+                return "";
+            return country;
+        }
+    }
+
+    /**
+     *
+     * @param id no more than 64 bytes
+     */
+    public record Message(String id){}
 }

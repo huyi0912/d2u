@@ -1,5 +1,6 @@
 package org.d2u.base.server.data;
 
+import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.SqlSession;
 
 /**

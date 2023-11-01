@@ -39,10 +39,6 @@ public class Product{
         return currentPrice;
     }
 
-   // public Quantity getCurrentPrice(){
-   //     return currentPrice.getQuantity();
-   // }
-
     @Override
     public boolean equals(Object obj){
         if(obj == this) return true;

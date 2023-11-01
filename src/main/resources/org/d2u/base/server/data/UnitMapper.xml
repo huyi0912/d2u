@@ -6,7 +6,7 @@
 
 <mapper namespace="org.d2u.base.shared.data.UnitMapper">
     <insert id="insert" parameterType="Unit" flushCache="true">
-        insert into unit values(#{target.name},#{target.scope.name});
+        insert into unit values(#{target.name},#{target.scope.name})
     </insert>
     <update id="update" parameterType="Unit" flushCache="true">
     </update>

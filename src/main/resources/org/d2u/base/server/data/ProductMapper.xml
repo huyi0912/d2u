@@ -28,7 +28,7 @@
     <delete id="delete" parameterType="Product" flushCache="true">
         delete from product where name=#{target.name}
     </delete>
-    <select id="findAll" resultMap="ProductMap">
+    <select id="findAll" resultMap="ProductResultMap">
         select distinct on (p.name) p.name as product_name ,
              h.value as price_quantity_value,
              h.unit_name as price_quantity_unit_name,
@@ -43,7 +43,7 @@
         order by p.name,h.end_time desc;
     </select>
 
-    <select id="findAllProducts" resultMap="ProductMap">
+    <select id="findAllProducts" resultMap="ProductResultMap">
         select distinct on (p.name) p.name as product_name ,
                h.value as price_quantity_value,
                h.unit_name as price_quantity_unit_name,
@@ -58,7 +58,7 @@
         order by p.name,h.end_time desc;
     </select>
 
-    <resultMap id="ProductMap" type="Product">
+    <resultMap id="ProductResultMap" type="Product">
         <id property="name" column="product_name" javaType="String"/>
         <association property="currentPrice" javaType="HistoricalQuantity" resultMap="ProductHistoricalPriceMap" columnPrefix="price_"/>
         <!--constructor>

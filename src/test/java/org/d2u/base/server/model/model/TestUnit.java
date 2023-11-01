@@ -127,4 +127,14 @@ public class TestUnit extends TestBase{
             assertEquals(4,scopes.size(),"Unit.Scope count");
         });
     }
+
+    @Test
+    public void testUnitExample(){
+        assertDoesNotThrow(()->{
+            Unit example = new Unit(null,null);
+            assertNull(example.name());
+            assertNull(example.scope());
+            logger.debug("example="+example);
+        },"Record allow null arguments");
+    }
 }
