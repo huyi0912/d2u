@@ -36,3 +36,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/.idea/dataSources.local.xml
+/.idea/dataSources/fec0fa53-7a7c-4f65-816e-f255c0c3dac3.xml
+/.idea/dataSources/fec0fa53-7a7c-4f65-816e-f255c0c3dac3/storage_v2/_src_/database/test.kkQ2AA/schema/information_schema.FNRwLQ.meta
+/.idea/dataSources/fec0fa53-7a7c-4f65-816e-f255c0c3dac3/storage_v2/_src_/database/test.kkQ2AA.meta
